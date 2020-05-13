@@ -11,50 +11,33 @@ class DetailPage extends React.Component {
         super(props);
 
         this.state = {
-            postTitle: "",
-            postDescription: "",
-            name: "",
-            email: "",
-            comments: [],
+            postTitle: "loading...",
+            postDescription: "loading...",
+            name: "loading...",
+            email: "loading...",
+            comments: [{body: "loading...", name: "loading...", email: "loading..."}],
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         if(this.props.userId !== 0 && this.props.postId !== 0){
-            fetch(`http://jsonplaceholder.typicode.com/posts/${this.props.postId}`)
-                .then(response => response.json())
-                .then(data => {
-                    this.setState({
-                        postTitle: data.title,
-                        postDescription: data.body,
-                    })
-                })
-                .catch(err => console.log(err))
+        try {
+            const response1 = await fetch(`http://jsonplaceholder.typicode.com/posts/${this.props.postId}`);
+            const json1 = await response1.json();
+            this.setState({postTitle: json1.title, postDescription: json1.body});
 
-            fetch(`http://jsonplaceholder.typicode.com/users/${this.props.userId}`)
-                .then(response => response.json())
-                .then(data => {
-                    this.setState({
-                        name: data.name,
-                        email: data.email,
-                    })
-                })
-                .catch(err => console.log(err))
+            const response2 = await fetch(`http://jsonplaceholder.typicode.com/users/${this.props.userId}`);
+            const json2 = await response2.json();
+            this.setState({name: json2.name, email: json2.email});
 
-            fetch(`http://jsonplaceholder.typicode.com/posts/${this.props.postId}/comments`)
-                .then(response => response.json())
-                .then(data => {
-                    this.setState({
-                        comments: data,
-                    })
-                })
-                .catch(err => console.log(err))
-        }
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
+            const response3 = await fetch(`http://jsonplaceholder.typicode.com/posts/${this.props.postId}/comments`);
+            const json3 = await response3.json();
+            this.setState({comments: json3});
+        } catch (error)  {
+            console.log(error);
+        }  
     }
+}
 
     render() {
         const { postTitle, postDescription, name, email} = this.state;
