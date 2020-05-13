@@ -50,6 +50,10 @@ class DetailPage extends React.Component {
                 })
                 .catch(err => console.log(err))
         }
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
     }
 
     render() {
