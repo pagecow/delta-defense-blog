@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Link, Typography } from '@material-ui/core';
 
-
 class Posts extends React.Component {
     constructor(props){
         super(props);
@@ -22,6 +21,7 @@ class Posts extends React.Component {
                     data
                 })
             })
+            .catch(err => console.log(err))
 
         fetch('https://jsonplaceholder.typicode.com/photos')
             .then(response => response.json())
@@ -31,10 +31,7 @@ class Posts extends React.Component {
                     photos: data
                 })
             })
-    }
-
-    handleGetImage = () => {
-        return "https://picsum.photos/400/300"
+            .catch(err => console.log(err))
     }
 
     render() {
@@ -46,14 +43,16 @@ class Posts extends React.Component {
                     console.log(e)
                     if(e && photos[e.id - 1]){
                         return(
-                            <div className="post-container" onClick={() => this.props.handleRedirect(e.userId, e.id)} >
-                                <img className="post-image" src={photos[e.id - 1].url} />
-                                <div className="post-description" >
-                                    <Typography variant="h5">{e.title}</Typography>
-                                    <Typography variant="subtitle2">{e.body}</Typography>
-                                    <Link color="primary" underline="always">READ MORE</Link>
+                            <Link color="primary" underline="always" onClick={() => this.props.handleChosenIds(e.userId, e.id)} href="/#/detail-page">
+                                <div className="post-container" key={e.id}>
+                                    <img className="post-image" src={photos[e.id - 1].url} />
+                                    <div className="post-description" >
+                                        <Typography variant="h5">{e.title}</Typography>
+                                        <Typography variant="subtitle2">{e.body}</Typography>
+                                        <Link color="primary" underline="always">READ MORE</Link>
+                                    </div>
                                 </div>
-                            </div>
+                            </Link>
                         )
                     }
                 })}

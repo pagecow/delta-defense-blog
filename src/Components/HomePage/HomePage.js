@@ -1,5 +1,4 @@
 import React, { Suspense } from 'react';
-import { Redirect } from 'react-router-dom';
 
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -9,7 +8,7 @@ import { Link, Typography } from '@material-ui/core';
 const Posts = React.lazy(() => import('./Posts'));
 
 class HomePage extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -17,9 +16,6 @@ class HomePage extends React.Component {
             topPostId: 0,
             topTitle: "",
             topDescription: "",
-            chosenUserId: 0,
-            chosenPostId: 0,
-            redirect: false,
         }
     }
 
@@ -35,52 +31,35 @@ class HomePage extends React.Component {
                     topDescription: data.body,
                 })
             })
-    }
-
-    handleRedirect = (userId, postId) => {
-        this.setState({
-            chosenUserId: userId,
-            chosenPostId: postId,
-        })
-
-        if(this.state.chosenUserId !== 0 && this.state.chosenPostId !== 0){
-            this.setState({
-                redirect: true,
-            })
-        }
+            .catch(err => console.log(err))
     }
 
     render() {
         const { topUserId, topPostId, topTitle, topDescription, redirect } = this.state;
 
-        if(redirect === true){
-            return <Redirect to="/#/detail-page" />
-        }
-
-        return(
+        return (
             <div id="home-page">
                 <Header />
                 <body>
-                    <>
-                        <section id="top-post">
-                            <div className="top-post-left">
-                                <Typography variant="h3">{topTitle}</Typography>
-                                <Typography variant="subtitle1">{topDescription}...</Typography>
-                                <Link color="primary" underline="always" onClick={() => this.handleRedirect(topUserId, topPostId)} href="/#/detail-page">READ MORE</Link>
-                            </div>
-                            <img src="https://picsum.photos/500/500" />
-                        </section>
-                        <section id="top-post-2">
-                            <img src="https://picsum.photos/1000/300" />
-                            <div className="top-post-left">
-                                <Typography variant="h5">{topTitle}</Typography>
-                                <Typography variant="subtitle2">{topDescription}...</Typography>
-                                <Link color="primary" underline="always" onClick={() => this.handleRedirect(topUserId, topPostId)} href="/#/detail-page">READ MORE</Link>
-                            </div>
-                        </section>
-                    </>
+                    <section id="top-post">
+                        <div className="top-post-left">
+                            <Typography variant="h3">{topTitle}</Typography>
+                            <Typography variant="subtitle1">{topDescription}...</Typography>
+                            <Link color="primary" underline="always" onClick={() => this.props.handleChosenIds(topUserId, topPostId)} href="/#/detail-page">READ MORE</Link>
+                        </div>
+                        <img src="https://picsum.photos/500/500" />
+                    </section>
+                    <section id="top-post-2">
+                        <img src="https://picsum.photos/1000/300" />
+                        <div className="top-post-left">
+                            <Typography variant="h5">{topTitle}</Typography>
+                            <Typography variant="subtitle2">{topDescription}...</Typography>
+                            <Link color="primary" underline="always" onClick={() => this.props.handleChosenIds(topUserId, topPostId)} href="/#/detail-page">READ MORE</Link>
+                        </div>
+                    </section>
+
                     <Suspense fallback={<div>Loading...</div>}>
-                        <Posts handleRedirect={this.handleRedirect}/>
+                        <Posts handleChosenIds={this.props.handleChosenIds} />
                     </Suspense>
                 </body>
                 <Footer />
