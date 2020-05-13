@@ -43,7 +43,7 @@ class Posts extends React.Component {
                     console.log(e)
                     if(e && photos[e.id - 1]){
                         return(
-                            <Link color="primary" underline="always" onClick={() => this.props.handleChosenIds(e.userId, e.id)} href="/#/detail-page">
+                            <Link color="primary" underline="none" onClick={() => this.props.handleChosenIds(e.userId, e.id)} href="/#/detail-page">
                                 <div className="post-container" key={e.id}>
                                     <img className="post-image" src={photos[e.id - 1].url} />
                                     <div className="post-description" >
