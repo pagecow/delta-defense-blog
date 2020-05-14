@@ -40,15 +40,7 @@ class DetailPage extends React.Component {
 }
 
     render() {
-        const { postTitle, postDescription, name, email} = this.state;
-
-        let comments;
-        if(!this.state.comments){
-            comments = null;
-        } else {
-            comments = this.state.comments
-        }
-        console.log(comments);
+        const { postTitle, postDescription, name, email, comments} = this.state;
 
         return(
             <div id="post-page">
